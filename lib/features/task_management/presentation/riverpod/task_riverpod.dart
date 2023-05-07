@@ -8,13 +8,13 @@ import 'package:innovage/features/task_management/presentation/riverpod/task_sta
 class TaskProvider extends StateNotifier<TasksState> {
   TaskProvider() : super(LoadingState());
   final TaskRepository _repository = LocalTaskRepository();
-  List<TaskModel> _tasks = [];
+  List<TaskModel> tasks = [];
 
   void getAllTasks() async {
     try {
       LoadingState();
-      _tasks.addAll(await _repository.getAllTasks());
-      state = LoadedState(_tasks);
+      tasks.addAll(await _repository.getAllTasks());
+      state = LoadedState(tasks);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -24,7 +24,6 @@ class TaskProvider extends StateNotifier<TasksState> {
     try {
       state = LoadingState();
       await _repository.addTask(task);
-      _tasks.add(task);
       state = TaskAdded(task);
     } catch (e) {
       debugPrint(e.toString());
@@ -35,8 +34,8 @@ class TaskProvider extends StateNotifier<TasksState> {
     try {
       state = LoadingState();
       await _repository.deleteTask(id);
-      _tasks.removeWhere((element) => element.id == id);
-      state = LoadedState(_tasks);
+      tasks.removeWhere((element) => element.id == id);
+      state = LoadedState(tasks);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -46,10 +45,10 @@ class TaskProvider extends StateNotifier<TasksState> {
     try {
       state = LoadingState();
       await _repository.editTask(task, id);
-      int index = _tasks.indexWhere((element) => element.id == id);
+      int index = tasks.indexWhere((element) => element.id == id);
       if (index >= 0) {
-        _tasks[index] = task;
-        state = LoadedState(_tasks);
+        tasks[index] = task;
+        state = LoadedState(tasks);
       }
     } catch (e) {
       debugPrint(e.toString());
