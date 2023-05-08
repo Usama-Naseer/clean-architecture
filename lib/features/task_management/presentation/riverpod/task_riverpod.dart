@@ -24,7 +24,6 @@ class TaskProvider extends StateNotifier<TasksState> {
     try {
       state = LoadingState();
       await _repository.addTask(task);
-      _tasks.add(task);
       state = TaskAdded(task);
     } catch (e) {
       debugPrint(e.toString());
